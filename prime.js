@@ -30,12 +30,11 @@ let data = inputData(firstNum, lastNum);
 function search(data) {
     if (data.length) {
         for (let i = 1; i < data.length; i++) {
-            if (i % 2 === 0 && i % 3 != 0) {
-                console.log(yellow(data[i]));
-            }
             if (i % 3 === 0) {
                 console.log(red(data[i]));
-            } else if (i % 3 != 0 && i % 2 != 0) {
+            } else if ((i + 1) % 3 === 0) {
+                console.log(yellow(data[i]));
+            } else {
                 console.log(green(data[i]));
             }
         }
@@ -45,5 +44,4 @@ function search(data) {
 }
 
 search(data);
-
 
