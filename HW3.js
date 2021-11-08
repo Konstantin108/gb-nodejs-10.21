@@ -45,3 +45,7 @@ getLine.on('line', (line) => {
         }
     }
 );
+
+getLine.on('close', () => {
+    console.log('Выполнение программы завершено!');
+});
