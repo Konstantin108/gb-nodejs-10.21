@@ -25,8 +25,10 @@ function reader(list) {
             return fs.readFile(fullPath, 'utf-8', (err, data) => {
                 if (err) console.log(err);
                 else console.log(data);
-                if (data.match(key)) console.log(`Ключ ${green(key)} в файле ${yellow(fileName)} найден`);
-                else console.log(`Ключ ${green(key)} в файле ${yellow(fileName)} ${red('отсутствует')}`);
+                if (key) {
+                    if (data.match(key)) console.log(`Ключ ${green(key)} в файле ${yellow(fileName)} найден`);
+                    else console.log(`Ключ ${green(key)} в файле ${yellow(fileName)} ${red('отсутствует')}`);
+                }
             });
         } else if (!fs.lstatSync(fullPath).isFile()) {
             return reader(fs.readdirSync(fullPath));
