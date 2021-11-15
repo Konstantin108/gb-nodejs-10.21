@@ -16,6 +16,7 @@
     "lesson4-readLine": "node lesson4-readLine.js",
     "lesson4-inquirer": "node lesson4-inquirer.js",
     "HW4": "node HW4.js",
+    "index-worker": "node index-worker.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
@@ -26,6 +27,7 @@
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",
+    "eiows": "^3.7.3",
     "express-load": "^1.1.16",
     "fs.promises": "^0.1.2",
     "inquirer": "^8.2.0",
@@ -35,11 +37,16 @@
     "node": "^17.0.1",
     "nodemon": "^2.0.15",
     "range.js": "^1.1.0",
+    "socket.io": "^4.3.2",
     "twix": "^1.3.0",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
     "@types/moment-precise-range-plugin": "^0.2.0",
     "@types/twix": "^0.6.39"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.5",
+    "utf-8-validate": "^5.0.7"
   }
 }

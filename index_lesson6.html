@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Socket</title>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+            integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<input id="input" type="text" autofocus>
+<button id="button">Send</button>
+<div id="messages"></div>
+
+<script>
+    const socket = io('localhost:5555');
+    const messagesBlock = document.querySelector('#messages');
+    const sendButton = document.querySelector('#button');
+    const input = document.querySelector('#input');
+
+    sendButton.onclick = () => {    //<-- отправка сообщения на сервер
+        const data = {
+            message: input.value
+        }
+        socket.emit('client-msg', data);
+        input.value = '';
+    };
+
+    socket.on('connect', () => {     //<-- подписка на событие подключения к серверу
+        console.log('произошло соединение с сервером');
+    });
+    socket.on('server-msg', data => {     //<-- подписка на событие получения сообщения от сервера
+        messagesBlock.insertAdjacentHTML('afterbegin', `<div>${data.message}</div>`);
+    });
+</script>
+</body>
+</html>
