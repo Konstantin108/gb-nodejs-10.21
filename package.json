@@ -16,12 +16,14 @@
     "lesson4-readLine": "node lesson4-readLine.js",
     "lesson4-inquirer": "node lesson4-inquirer.js",
     "HW4": "node HW4.js",
+    "reader2": "node reader2.js",
     "index-worker": "node index-worker.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
     "reader": "lesson4-inquirer.js",
-    "hw4": "HW4.js"
+    "hw4": "HW4.js",
+    "reader2": "reader2.js"
   },
   "author": "",
   "license": "ISC",
