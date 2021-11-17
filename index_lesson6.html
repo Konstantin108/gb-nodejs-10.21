@@ -8,9 +8,98 @@
             integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
             crossorigin="anonymous"></script>
 </head>
+<style>
+    #messages {
+        width: 354px;
+    }
+
+    #button {
+        cursor: pointer;
+    }
+
+    #green {
+        color: green;
+    }
+
+    #red {
+        color: red;
+    }
+
+    #yellow {
+        color: yellow;
+    }
+
+    #input {
+        font-family: Roboto Condensed;
+        font-size: 16.7px;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+        background-color: #4a4a4a;
+        border-style: none;
+        font-size: 16.7px;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+        color: #ffffff;
+        width: 158px;
+        height: 35px;
+        padding-left: 16px;
+        padding-right: 16px;
+        border: 1px solid white;
+        outline: none;
+    }
+
+    #input::-webkit-input-placeholder {
+        opacity: 1;
+        color: white;
+        -webkit-transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease;
+    }
+
+    #input:focus::-webkit-input-placeholder {
+        opacity: 0;
+        -webkit-transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease;
+    }
+
+    #button {
+        height: 38px;
+        width: 160px;
+    }
+
+    #textMsg {
+        display: flex;
+        margin-right: 152px;
+        padding: 10px;
+        border-radius: 12px;
+        background-color: #d9d077;
+        word-wrap: break-word;
+        color: white;
+    }
+
+    #textMyMsg {
+        margin-left: 152px;
+        padding: 10px;
+        border-radius: 12px;
+        background-color: #6dc46d;
+        display: flex;
+        justify-content: flex-end;
+        word-wrap: break-word;
+        color: white;
+    }
+
+    .title {
+        font-size: 13px;
+    }
+
+    .myTitle {
+        text-align: right;
+        font-size: 13px;
+    }
+</style>
 <body>
-<input id="input" type="text" autofocus>
-<button id="button">Send</button>
+<div id="count"></div>
+<input id="input" type="text" placeholder="введите сообщение" autofocus>
+<button id="button">Отправить сообщение</button>
 <div id="messages"></div>
 
 <script>
@@ -18,6 +107,7 @@
     const messagesBlock = document.querySelector('#messages');
     const sendButton = document.querySelector('#button');
     const input = document.querySelector('#input');
+    const count = document.querySelector('#count');
 
     sendButton.onclick = () => {    //<-- отправка сообщения на сервер
         const data = {
@@ -27,11 +117,67 @@
         input.value = '';
     };
 
-    socket.on('connect', () => {     //<-- подписка на событие подключения к серверу
-        console.log('произошло соединение с сервером');
+    socket.on('new_connect', (arg) => {     //<-- подписка на событие подключения к серверу
+        // console.log(`произошло соединение с сервером для пользователя ${arg}`);
+        messagesBlock.insertAdjacentHTML('afterbegin', `<div>пользователь <span id="green">${arg}</span> вошёл в чат</div>`);
     });
+
+    socket.on('my_connect', (arg) => {     //<-- подписка на событие подключения к серверу
+        messagesBlock.insertAdjacentHTML('afterbegin', `<div>Добро пожаловать, <span id="green">${arg}</span>!</div>`);
+    });
+
+    socket.on('count_connection', (arg) => {
+        count.innerHTML = `количество пользователей онлайн: ${arg} `;
+    });
+
+    socket.on('my_count_connection', (arg) => {
+        count.innerHTML = `количество пользователей онлайн: ${arg} `;
+    });
+
+    socket.on('count_connection_disconnect', (arg) => {
+        count.innerHTML = `количество пользователей онлайн: ${arg} `;
+    });
+
+    socket.on('my_count_connection_disconnect', (arg) => {
+        count.innerHTML = `количество пользователей онлайн: ${arg} `;
+    });
+
     socket.on('server-msg', data => {     //<-- подписка на событие получения сообщения от сервера
-        messagesBlock.insertAdjacentHTML('afterbegin', `<div>${data.message}</div>`);
+        messagesBlock.insertAdjacentHTML('afterbegin', `
+                <div>
+                    <p class="title">
+                        получено ссобщение от <span id="green">${data.clientName}</span>
+                    </p>
+                    <div id="textMsg">
+                        ${data.message}
+                    </div>
+                </div>
+        `);
+    });
+
+    socket.on('server-my-msg', data => {     //<-- подписка на событие получения сообщения от сервера
+        messagesBlock.insertAdjacentHTML('afterbegin', `
+                <div>
+                    <p class="myTitle">
+                        сообщение отправлено
+                    </p>
+                    <div id="textMyMsg">
+                        ${data.message}
+                    </div>
+                </div>
+        `);
+    });
+
+    socket.on('left', (arg) => {
+        messagesBlock.insertAdjacentHTML('afterbegin', `<div id="red">пользователь ${arg} покинул чат</div>`);
+    });
+
+    socket.on('connect-problem', (arg) => {
+        messagesBlock.insertAdjacentHTML('afterbegin', `<div id="green">пользователь ${arg} снова на связи</div>`);
+    });
+
+    socket.on('my-connect-problem', () => {
+        messagesBlock.insertAdjacentHTML('afterbegin', `<div id="yellow">соединение восстановлено</div>`);
     });
 </script>
 </body>
